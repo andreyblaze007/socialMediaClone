@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
 </head>
 <body>
     <h1>Demo</h1>
-    <form>
+    <form action="/iamsendingapost" method="POST">
         <label for="post-name">Write your story</label><br>
         <input type="text" id="post-message" name="post-message" placeholder="Write your story">
-        <button id="post-button">post message</button>
+        <!-- <button id="post-button">post message</button> -->
+        <input type="submit" action="post">
     </form>
     
     <h2>This user's story</h2>

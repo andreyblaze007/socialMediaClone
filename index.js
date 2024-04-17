@@ -1,8 +1,8 @@
 const express=require('express')
 const app=express()
 
-const utils=require('./utils.js')
-console.log(utils.addTen(10));
+//const utils=require('./utils.js')
+//console.log(utils.addTen(10));
 
 app.listen(3000, ()=> console.log('listening on port 3000'))
 
