@@ -1,0 +1,45 @@
+body{
+    margin:0px;
+    background-color: burlywood;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: darkgrey;
+}
+
+nav a{
+    color:aqua;
+    font-size:20px;
+}
+
+nav a:hover{
+    color: red;
+    text-decoration: none;
+}
+
+nav a:visited{
+    text-decoration: none;
+}
+
+nav a:link{
+    text-decoration: none;
+}
+
+nav a:active{
+    text-decoration: none;
+}
+
+h2{
+    color:red;
+    text-align: center;
+}
+
+#newMessage{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: inherit;
+}
