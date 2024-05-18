@@ -45,8 +45,9 @@ const connectionString=`mongodb+srv://CCO6005-00:${mongoDBPassword}@cluster0.lpf
 console.log(connectionString)
 mongoose.connect(connectionString)
 
-//mongoose.connect(`mongodb+srv://CCO6005-00:${mongoDBPassword}@cluster0.lpfnqqx.mongodb.net/DJWApp?retryWrites=true&w=majority`)​
 const postData=require('./models/post-data.js')
+const multer=require('multer')
+const upload=multer({dest: './public/uploads'})
 
 
 
@@ -62,11 +63,85 @@ function checkLoggedIn(request, response, nextAction){
     }
 }
 
+function checkLoggedInState(request){
+    return (request.session && request.session.userid)
+}
+
+app.set('view engine', 'ejs')
+
+
 //controller for the main app view, depends on user logged in state
-app.get('/app', checkLoggedIn, (request, response)=>{
-    response.redirect('./application.html')
+app.get('/app', checkLoggedIn, async (request, response)=>{
+    // response.redirect('./application.html')
+    response.render('pages/app', {
+        username: request.session.userid,
+        isLoggedIn: checkLoggedInState(request),
+        postData: await postData.getPosts(5)
+    })
 })
 
+app.get('/viewpost', checkLoggedIn, async (request, response)=>{
+    // response.redirect('./application.html')
+    let postID=request.query.postid//'66321bf0fdfeacf1d9fb6e88'
+    // console.log(postID)
+    let retrievedPost=await postData.getPost(postID)
+    // console.log(retrievedPost)
+    response.render('pages/viewpost', {
+        isLoggedIn: checkLoggedInState(request),
+        post: await postData.getPost(postID)
+    })
+})
+
+
+app.get('/like', checkLoggedIn, async (request, response)=>{
+    // console.log('!!')
+    let postID=request.query.postid
+    // console.log(postID)
+    let found=await postData.likePost(postID)
+    console.log(found)
+    response.render('pages/app', {
+        username: request.session.userid,
+        isLoggedIn: checkLoggedInState(request),
+        postData: await postData.getPosts(5)
+    })
+})
+
+app.post('/comment', checkLoggedIn, async (request, response)=>{
+    // console.log('!!')
+    let postID=request.body.postid
+    let comment=request.body.comment
+    // console.log(postID)
+    let found=await postData.commentOnPost(postID, request.session.userid, comment)
+    console.log(found)
+    response.render('pages/viewpost', {
+        isLoggedIn: checkLoggedInState(request),
+        post: await postData.getPost(postID)
+    })
+})
+
+app.get('/register', (request, response)=>{
+    response.render('pages/register', {
+        isLoggedIn: checkLoggedInState(request)
+    })
+})
+
+app.get('/logout', (request, response)=>{
+    response.render('pages/logout', {
+        isLoggedIn: checkLoggedInState(request)
+    })
+})
+
+app.get('/profile', (request, response)=>{
+    response.render('pages/profile', {
+        isLoggedIn: checkLoggedInState(request)
+    })
+})
+
+app.get('/login', (request, response)=>{
+    response.render('pages/login', {
+       isLoggedIn: checkLoggedInState(request)
+    })
+})
 
 //controller for logout
 app.post('/logout', async (request, response)=>{
@@ -84,25 +159,43 @@ app.post('/login', async (request, response)=>{
     console.log(userData)
     if(await users.findUser(userData.username)){
         console.log('user found')
-        if(await users.checkPassword(userData.username, userData.password)){
-            console.log('password matches')
-            request.session.userid=userData.username
-            // users.setLoggedIn(userData.username, true)
-            response.redirect('/loggedin.html')
-        } else {
-            console.log('password wrong')
-            response.redirect('/loginfailed.html')
-        }
+        await users.checkPassword(userData.username, userData.password, async function(isMatch){
+            if(isMatch){
+                console.log('password matches')
+                request.session.userid=userData.username
+                // await users.setLoggedIn(userData.username, true)
+                response.render('pages/app', {
+                    username: request.session.userid,
+                    isLoggedIn: checkLoggedInState(request),
+                    postData: await postData.getPosts(5)
+                })
+            } else {
+                console.log('password wrong')
+                response.render('pages/login',{
+                    isLoggedIn: checkLoggedInState(request)
+                })
+            }
+        })
     }
     console.log(await users.getUsers())
 })
 
 
-app.post('/newpost',(request, response) =>{
+app.post('/newpost', upload.single('myImage'), async (request, response) =>{
     console.log(request.body)
     console.log(request.session.userid)
-    postData.addNewPost(request.session.userid, request.body)
-    response.redirect('/postsuccessful.html')
+    console.log(request.file)
+    let filename=null
+    if(request.file && request.file.filename){ //check we have a file and that it has a file name
+        filename='uploads/'+request.file.filename
+    }
+    postData.addNewPost(request.session.userid, request.body, filename)
+    // response.redirect('/postsuccessful.html')
+    response.render('pages/app', {
+        username: request.session.userid,
+        isLoggedIn: checkLoggedInState(request),
+        postData: await postData.getPosts(5)
+    })
 })
 
 app.get('/getposts',async (request, response)=>{
@@ -125,7 +218,9 @@ app.post('/register', async (request, response)=>{
         })
     } else {
         await users.newUser(userData.username, userData.password)
-        response.redirect('/registered.html')
+        response.render('pages/login',{
+            isLoggedIn: checkLoggedInState(request)
+        })
     }
     console.log(await users.getUsers())
 })

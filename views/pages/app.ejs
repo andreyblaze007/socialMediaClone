@@ -1,0 +1,38 @@
+<%- include('../partials/head')%>
+<body>
+    <%- include('../partials/header')%>
+    <h1>Welcome to the app</h1>
+    <h4>Username: <%= username %></h4>
+    <h2>Create a new post</h2>
+    <form action="/newpost" enctype="multipart/form-data" method="POST">
+        <label>Message</label><br>
+        <input type="file" name="myImage" accept="image/*"><br>
+        <input type="text" id="message" name="message"><br>
+        <input type="submit" value="Post">
+    </form>
+    <hr>
+    <h2>Recent Posts</h2>
+    <ul>
+        <% postData.forEach(post=>{ %>
+            <li>
+                <% if(post.imagePath){ %>
+                        <img src="<%= post.imagePath %>" alt="" class="post-image-thumbnail">
+                    <% } else { %>
+                        <p>sorry no image available</p>
+                    <% } %>
+                <p>
+                    <%= post.message %>
+                </p>
+                <p>
+                    <%= post.postedBy %>
+                </p>
+                <!-- <button onlick="location.href='/viewpost?postid=<%= post._id %>'">like <%= post.likes %></button> -->
+                <button onclick="location.href='/like?postid=<%= post._id %>'">&#x2665 <%= post.likes %></button>
+                <a href="/viewpost?postid=<%= post._id %>">viewpost</a>
+                <hr>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
+<%- include('../partials/footer')%>

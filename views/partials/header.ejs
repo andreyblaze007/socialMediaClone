@@ -1,0 +1,14 @@
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <% if(isLoggedIn){ %>
+            <li><a href="/app">posts</a></li>
+            <li><a href="/logout">logout</a></li>
+            <li><a href="/profile">profile</a></li>
+        <% } else { %>
+            <li><a href="/register">register</a></li>
+            <li><a href="/login">login</a></li>
+        <% } %>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>

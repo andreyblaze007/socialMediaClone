@@ -1,0 +1,13 @@
+<%- include('../partials/head')%>
+<body>
+    <%- include('../partials/header')%>
+    <h2>Please login</h2>
+    <form action="/login" method="POST">
+        <label>Username</label>
+        <input type="text" id="username" name="username"><br>
+        <label>Password</label>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+<%- include('../partials/footer')%>

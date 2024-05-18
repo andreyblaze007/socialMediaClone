@@ -1,0 +1,45 @@
+<%- include('../partials/head')%>
+<body>
+    <%- include('../partials/header')%>
+    <h1>Welcome to the app</h1>
+     <h2>Viewing Post</h2>
+    <div>
+        <% if(post.imagePath){ %>
+                <img src="<%= post.imagePath %>" alt="" class="post-image-thumbnail">
+            <% } else { %>
+                <p>sorry no image available</p>
+            <% } %>
+        <p>
+            <%= post.message %>
+        </p>
+        <p>
+            <%= post.postedBy %>
+        </p>
+        <!-- list of comments -->
+        <h4>Comments <%= post.comments.length %></h4>
+        <ul>
+            <% post.comments.forEach(comment=>{ %>
+                <li>
+                    <p>
+                        <%= comment.message %>
+                    </p>
+                    <p>
+                        <%= comment.commentBy %>
+                    </p>
+                    <hr>
+                </li>
+            <% }) %>
+        </ul>
+        <!-- form to add a comments -->
+        <form action="/comment" method="POST">
+            <label>Add a comment</label><br>
+            <input type="hidden" id="postid" name="postid" value="<%= post._id %>">
+            <input type="text" id="comment" name="comment"><br>
+            <input type="submit" value="Comment">
+        </form>
+        <a href="/app">back to list</a>
+    </div>
+
+</body>
+</html>
+<%- include('../partials/footer')%>
