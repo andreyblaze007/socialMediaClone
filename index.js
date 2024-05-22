@@ -133,6 +133,7 @@ app.get('/logout', (request, response)=>{
 
 app.get('/profile', (request, response)=>{
     response.render('pages/profile', {
+        username: request.session.userid,
         isLoggedIn: checkLoggedInState(request)
     })
 })
@@ -142,6 +143,15 @@ app.get('/login', (request, response)=>{
        isLoggedIn: checkLoggedInState(request)
     })
 })
+
+//controller for reset password
+
+app.get('/changepass', (request, response)=>{
+    response.render('pages/changepass', {
+       isLoggedIn: checkLoggedInState(request)
+    })
+})
+
 
 //controller for logout
 app.post('/logout', async (request, response)=>{
@@ -222,5 +232,18 @@ app.post('/register', async (request, response)=>{
             isLoggedIn: checkLoggedInState(request)
         })
     }
+    console.log(await users.getUsers())
+})
+
+app.post('/changepas', async (request, response)=>{
+    console.log(request.body)
+    let userData=request.body
+    // console.log(userData.username)
+    
+    await users.newUser(userData.username, userData.password)
+    response.render('pages/login',{
+        isLoggedIn: checkLoggedInState(request)
+    })
+    
     console.log(await users.getUsers())
 })

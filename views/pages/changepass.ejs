@@ -1,0 +1,12 @@
+<%- include('../partials/head')%>
+<body>
+    <%- include('../partials/header')%>
+    <h2>Reset your Password</h2>
+    <form action="/changepass" method="POST">
+        <label>Username: <%= username %></label>
+        <label>Password</label>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="ChangePassword">
+    </form>
+</body>
+<%- include('../partials/footer')%>

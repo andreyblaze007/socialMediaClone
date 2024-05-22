@@ -1,36 +1,31 @@
 body{
     margin:0px;
-    background-color: burlywood;
+    background-color:white ;
+    color:rgb(72, 71, 71);
 }
 
 nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: darkgrey;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    background-color: darkgrey;
-}
-
-nav a{
-    color:aqua;
-    font-size:20px;
-}
-
-nav a:hover{
-    color: red;
+  }
+  
+  nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
     text-decoration: none;
-}
-
-nav a:visited{
-    text-decoration: none;
-}
-
-nav a:link{
-    text-decoration: none;
-}
-
-nav a:active{
-    text-decoration: none;
-}
+  }
+  
+  nav a:hover {
+    background-color: rgb(139, 139, 139);
+  }
 
 h2{
     color:red;
@@ -43,3 +38,29 @@ h2{
     justify-content: space-evenly;
     margin-top: inherit;
 }
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(72, 71, 71)fff;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover {
+    background-color: rgb(139, 139, 139);
+  }

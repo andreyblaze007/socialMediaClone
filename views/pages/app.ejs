@@ -1,13 +1,14 @@
 <%- include('../partials/head')%>
+<head>
+    <link rel="stylesheet" href="styleApp.css">
+</head>
 <body>
     <%- include('../partials/header')%>
-    <h1>Welcome to the app</h1>
-    <h4>Username: <%= username %></h4>
+    <h3>Username: <%= username %></h3>
     <h2>Create a new post</h2>
     <form action="/newpost" enctype="multipart/form-data" method="POST">
-        <label>Message</label><br>
+        <textarea type="text" id="message" name="message"></textarea><br>
         <input type="file" name="myImage" accept="image/*"><br>
-        <input type="text" id="message" name="message"><br>
         <input type="submit" value="Post">
     </form>
     <hr>
@@ -15,17 +16,21 @@
     <ul>
         <% postData.forEach(post=>{ %>
             <li>
+
+                <p>
+                    <p>Posted by: <%= post.postedBy %></p>
+                    
+                </p>
+
                 <% if(post.imagePath){ %>
                         <img src="<%= post.imagePath %>" alt="" class="post-image-thumbnail">
                     <% } else { %>
-                        <p>sorry no image available</p>
+                        <p></p>
                     <% } %>
                 <p>
                     <%= post.message %>
                 </p>
-                <p>
-                    <%= post.postedBy %>
-                </p>
+                
                 <!-- <button onlick="location.href='/viewpost?postid=<%= post._id %>'">like <%= post.likes %></button> -->
                 <button onclick="location.href='/like?postid=<%= post._id %>'">&#x2665 <%= post.likes %></button>
                 <a href="/viewpost?postid=<%= post._id %>">viewpost</a>
